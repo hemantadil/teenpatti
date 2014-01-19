@@ -2,15 +2,96 @@
 using System.Collections;
 
 
+public class Player: MonoBehaviour{
+
+	private int balance;
+	private string name;
+	private bool hasPacked;
+	private int mybet;
+	//private Card mycards[3];
+	
+	public Player()
+	{
+		balance = 1000;
+		hasPacked = false;
+		mybet = 0;
+		
+	}
+
+	public void setName(string name)
+	{
+		this.name = name;
+
+	}
+
+
+	void placeBet(int amt)
+	{
+		//if(amt > balance)
+		//print error message in client
+		//else
+		balance -= amt;
+		
+		
+		
+	}
+
+	public bool isPacked(){
+				return hasPacked;
+		}
+	
+	
+}
+
+
+public class Game :MonoBehaviour {
+	private int turn=-1;
+	private int totalBet = 0;
+	private int noPlayer = 4;
+	private int activePlayer=4;
+	private Player[] peers = new Player[4];
+
+	public int getTurn(){
+		return turn;
+	}
+
+	public void updateTurn(){
+		turn++;
+		turn= turn % noPlayer;
+		while(peers[turn].isPacked() == true){
+			turn++;
+			turn = turn % noPlayer;                                                                                                                                   
+		}
+	}
+
+	public void updateTotalBet(int bet){
+		totalBet+=bet;
+
+	}
+
+	public int getTotalBet(){
+		return totalBet;
+	}
+
+	public void distributeCard(){
+		//shuffle;
+		// call the players's setter to set the cards they have got
+	}
+
+    public int getActivePlayer(){
+				return activePlayer;
+		}
+
+}
 
 public class menu : MonoBehaviour {
 
-
-
+	int turn = -1;
+	int totalbet=0;
 	public string IP = "127.0.0.1";
 	public int Port = 25001;
-
-
+	string eds = "name";
+	public Player p = new Player();
 	void OnGUI()
 	{
 		var useNat = !Network.HavePublicAddress ();
@@ -31,14 +112,23 @@ public class menu : MonoBehaviour {
 			else if (Network.peerType == NetworkPeerType.Client) {
 
 
-			//GUI.Label(new  Rect (150, 100, 100, 25), "Client it is");
-			string eds = "name";
-			string str = GUI.TextField (new Rect (150, 100, 20, 100), eds);
-		if (GUI.Button (new  Rect (150, 30, 100, 25), "Logout")) {
+			GUI.Label(new  Rect (150, 80, 100, 25), "Set Nick");
+
+			eds = GUI.TextField (new Rect (150, 100, 150, 20), eds,100);
+		
+			networkView.RPC("getName", RPCMode.Server, eds);
+
+			if (GUI.Button (new  Rect (150, 130, 100, 25), "Logout")) {
 				
 						Network.Disconnect(250);
 				
 					}
+
+			if (GUI.Button (new  Rect (280, 130, 100, 25), "Play")) {
+				
+				Network.Disconnect(250);
+				
+			}
 			
 ;
 
@@ -48,6 +138,14 @@ public class menu : MonoBehaviour {
 			
 			GUI.Label(new  Rect (150, 100, 100, 25), "Server it is");
 			GUI.Label(new  Rect (150, 80, 100, 25), "Connections : "+ Network.connections.Length );
+
+
+			for(int i=0;i<Network.connections.Length;i++){
+				Debug.Log (Network.connections[i].ipAddress+" "+Network.connections[i].guid);
+
+
+			}
+
 			if (GUI.Button (new  Rect (150, 30, 100, 25), "Logout")) {
 				
 				Network.Disconnect(250);
@@ -55,11 +153,18 @@ public class menu : MonoBehaviour {
 			}
 			
 		}
-
-
+	
 
 	}
 
+
+	[RPC]
+	public void getName(string name)
+	{
+		p.setName (name);
+		
+		
+	}
 
 
 	// Use this for initialization
@@ -71,40 +176,25 @@ public class menu : MonoBehaviour {
 	void Update () {
 	
 	}
-}
 
-public class Player: MonoBehaviour{
+	public int getTurn(){
 
-
-	private int balance;
-	private string name;
-	private bool hasPacked;
-	private int mybet;
-	//private Card mycards[3];
-
-	public Player(string name)
-	{
-		balance = 1000;
-		hasPacked = false;
-		this.name =  name;
-		mybet = 0;
- 
+		return turn;
 	}
 
-	void placeBet(int amt)
+	public void setTurn()
 	{
-		//if(amt > balance)
-			//print error message in client
-		//else
-				balance -= amt;
+		if (Network.peerType == NetworkPeerType.Server) {
 
+			turn = turn +1;
+
+
+
+				}
 
 
 	}
 
 
+
 }
-
-
-
-
