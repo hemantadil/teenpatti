@@ -1,7 +1,11 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\scripts\menu.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\scripts\Cards.cs">
     <Files>
+      <File FileName="teenpatti.sln" Line="1" Column="1" />
+      <File FileName="Assets\scripts\Cards.cs" Line="33" Column="1" />
+      <File FileName="Assets\scripts\Cards_Textured.js" Line="1" Column="1" />
+      <File FileName="Assets\scripts\Cards.cs" Line="28" Column="3" />
       <File FileName="Assets\scripts\menu.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
